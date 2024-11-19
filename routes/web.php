@@ -1,10 +1,22 @@
 <?php
 
 use App\Http\Controllers\BlogController;
+use App\Http\Controllers\ItemController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+
+
+Route::get('/items',[ItemController::class,'index'])->name('items.index');
+Route::get('/items/create',[ItemController::class,'create'])->name('items.create');
+Route::post('/items',[ItemController::class,'store'])->name('items.store');
+Route::get('/items/{item}/edit',[ItemController::class,'edit'])->name('items.edit');
+Route::put('/items/{item}',[ItemController::class,'update'])->name('items.update');
+Route::delete('/items/{item}',[ItemController::class,'destroy'])->name('items.destroy');
+
+
+
 
 Route::get('/blogs',[BlogController::class,'index'])->name('blogs.index');
 Route::get('/blogs/create',[BlogController::class,'create'])->name('blogs.create');

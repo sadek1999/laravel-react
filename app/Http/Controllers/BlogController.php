@@ -13,9 +13,10 @@ class BlogController extends Controller
      */
     public function index()
     {
-        //
-        $blogs=Blog::all();
-        return Inertia::render('blogs/index' ,['blogs'=>$blogs]);
+
+        $blogs = Blog::all();
+        // dd($blogs);
+        return Inertia::render('blogs/index', ['blogs' => $blogs]);
     }
 
     /**
@@ -32,12 +33,12 @@ class BlogController extends Controller
      */
     public function store(Request $request)
     {
-        $blog=$request->validate([
-            'title'=>'required',
-            'content'=>'required'
+        $blog = $request->validate([
+            'title' => 'required',
+            'content' => 'required'
         ]);
-       Blog::create($blog);
-       return redirect()->route('blogs.index')->with('success','blog is created');
+        Blog::create($blog);
+        return redirect()->route('blogs.index')->with('success', 'blog is created');
     }
 
     /**
@@ -53,7 +54,7 @@ class BlogController extends Controller
      */
     public function edit(Blog $blog)
     {
-      return  Inertia::render('blogs/edit',['blog'=>$blog]);
+        return  Inertia::render('blogs/edit', ['blog' => $blog]);
     }
 
     /**
@@ -61,7 +62,13 @@ class BlogController extends Controller
      */
     public function update(Request $request, Blog $blog)
     {
+        $ValidatedData = $request->validate([
+            'title' => 'required',
+            'content' => 'nullable'
+        ]);
 
+        $blog->update($ValidatedData);
+        return redirect()->route('blogs.index')->with('success','The blog Updated');
     }
 
     /**
@@ -70,6 +77,6 @@ class BlogController extends Controller
     public function destroy(Blog $blog)
     {
         $blog->delete();
-        return redirect()->route('blogs.index')->with('success','the blog is deleted');
+        return redirect()->route('blogs.index')->with('success', 'the blog is deleted');
     }
 }
