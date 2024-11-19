@@ -6,6 +6,8 @@ use App\Models\Item;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
+use function Termwind\render;
+
 class ItemController extends Controller
 {
     /**
@@ -15,9 +17,9 @@ class ItemController extends Controller
     public function index()
     {
         //
-    $a=Item::all();
-   
-// return Inertia::render('items/index');
+        $items = Item::all();
+
+        return Inertia::render('items/index', ['items' => $items]);
     }
 
     /**
@@ -35,13 +37,13 @@ class ItemController extends Controller
     public function store(Request $request)
     {
         //
-        $item=$request->validate([
-            'name'=>'required',
-            'qty'=>'required'
+        $item = $request->validate([
+            'name' => 'required',
+            'qty' => 'required'
         ]);
 
         Item::create($item);
-
+        return redirect()->route('items.index')->with('success');
     }
 
     /**
@@ -55,24 +57,33 @@ class ItemController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Item $item)
     {
-        //
+            return Inertia::render('items/edit',['item'=>$item]);
+
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Item $item)
     {
-        //
+        $data=$request->validate([
+            'name'=>'required',
+            'qty'=>'required'
+        ]);
+
+        $item->update($data);
+        return redirect()->route('items.index')->with('success');
+
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Item $item)
     {
-        //
+       $item->delete();
+       return redirect()->route('items.index')->with('success');
     }
 }
